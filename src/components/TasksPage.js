@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import TaskList from "./TaskList";
 
 const TASK_STATUSES = [
@@ -7,7 +7,40 @@ const TASK_STATUSES = [
   'Completed'
 ];
 
-const TasksPage = ({tasks}) => {
+const initFormState = {
+    showNewCardForm: false,
+    title: "",
+    description: ""
+};
+
+const TasksPage = ({tasks, onCreateTask}) => {
+  const [state, setState] = useState(initFormState);
+
+  const handleChange = ({target: {name, value}}) => {
+    setState({
+      ...state,
+      [name]: value
+    });
+  }
+
+  const toggleForm = () => {
+    setState({
+      ...state,
+      showNewCardForm: !state.showNewCardForm
+    })
+  }
+
+  const resetForm = () => setState(initFormState);
+
+  const handleCreateTask = e => {
+    onCreateTask({
+      title: state.title,
+      description: state.description
+    });
+    resetForm();
+    e.preventDefault();
+  }
+
   const taskLists = TASK_STATUSES.map(status => {
     const statusTasks = tasks.filter(task => task.status === status);
     return <TaskList key={status} status={status} tasks={statusTasks}/>
@@ -15,6 +48,42 @@ const TasksPage = ({tasks}) => {
 
   return (
     <div className="tasks">
+      <div className="tasks-list-header">
+        <button
+          className="button button-default"
+          onClick={toggleForm}
+        >
+          + New Task
+        </button>
+      </div>
+
+      {state.showNewCardForm && (
+        <form className="task-list-form" onSubmit={handleCreateTask}>
+          <input
+            className="full-width-input"
+            onChange={handleChange}
+            value={state.title}
+            type="text"
+            name="title"
+            placeholder="title"
+          />
+          <input
+            className="full-width-input"
+            onChange={handleChange}
+            value={state.description}
+            type="text"
+            name="description"
+            placeholder="description"
+          />
+          <button
+            type="submit"
+            className="submit"
+          >
+            Save
+          </button>
+        </form>
+      )}
+
       <div className="task-lists">
         {taskLists}
       </div>

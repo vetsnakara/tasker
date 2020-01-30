@@ -6,7 +6,8 @@ const mockTasks = [
     status: "In Progress"
   },
   {
-    id: 2,  title: "Peace on Earth",
+    id: 2,
+    title: "Peace on Earth",
     description: "No big deal",
     status: "In Progress"
   }
@@ -17,7 +18,22 @@ const initState = {
 };
 
 const tasksReducer = (state = initState, action) => {
-  return state;
+  switch (action.type) {
+    case "CREATE_TASK":
+      const {tasks} = state;
+      return {
+        tasks: [
+          ...tasks,
+          {
+            id: tasks[tasks.length-1].id + 1,
+            status: "Unstarted",
+            ...action.payload
+          }
+        ]
+      }
+    default:
+      return state;
+  }
 }
 
 export default tasksReducer;
