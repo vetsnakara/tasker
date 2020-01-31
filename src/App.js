@@ -2,16 +2,24 @@ import React from 'react';
 import { connect } from "react-redux";
 
 import TasksPage from "./components/TasksPage";
-import {createTask} from "./actions";
+import {createTask, editTask} from "./actions";
 
 const App = ({tasks, dispatch}) => {
-  const handleCreateTask = (task) => {
+  const handleTaskCreate = (task) => {
     dispatch(createTask(task))
+  }
+
+  const handleStatusChange = (taskId, params) => {
+    dispatch(editTask(taskId, params));
   }
 
   return (
     <div className="main-content">
-      <TasksPage tasks={tasks} onCreateTask={handleCreateTask}/>
+      <TasksPage
+        tasks={tasks}
+        onTaskCreate={handleTaskCreate}
+        onTaskStatusChange={handleStatusChange}
+      />
     </div>
   )
 };

@@ -1,4 +1,8 @@
-import {uniqueId} from "../actions";
+import {
+  CREATE_TASK,
+  EDIT_TASK,
+  uniqueId
+} from "../actions";
 
 const mockTasks = [
   {
@@ -21,13 +25,19 @@ const initState = {
 
 const tasksReducer = (state = initState, action) => {
   switch (action.type) {
-    case "CREATE_TASK":
-      const {tasks} = state;
+    case CREATE_TASK:
       return {
         tasks: [
-          ...tasks,
+          ...state.tasks,
           action.payload
         ]
+      }
+    case EDIT_TASK:
+      const {taskId, params} = action.payload;
+      return {
+        tasks: state.tasks.map(task => task.id === taskId
+            ? { ...task, ...params} 
+            : task)
       }
     default:
       return state;

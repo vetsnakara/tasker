@@ -1,11 +1,6 @@
 import React, {useState} from "react";
 import TaskList from "./TaskList";
-
-const TASK_STATUSES = [
-  'Unstarted',
-  'In Progress',
-  'Completed'
-];
+import {TASK_STATUSES} from "../constants";
 
 const initFormState = {
     showNewCardForm: false,
@@ -13,7 +8,11 @@ const initFormState = {
     description: ""
 };
 
-const TasksPage = ({tasks, onCreateTask}) => {
+const TasksPage = ({
+  tasks, 
+  onTaskCreate, 
+  onTaskStatusChange
+}) => {
   const [state, setState] = useState(initFormState);
 
   const handleChange = ({target: {name, value}}) => {
@@ -33,7 +32,7 @@ const TasksPage = ({tasks, onCreateTask}) => {
   const resetForm = () => setState(initFormState);
 
   const handleCreateTask = e => {
-    onCreateTask({
+    onTaskCreate({
       title: state.title,
       description: state.description
     });
@@ -43,7 +42,14 @@ const TasksPage = ({tasks, onCreateTask}) => {
 
   const taskLists = TASK_STATUSES.map(status => {
     const statusTasks = tasks.filter(task => task.status === status);
-    return <TaskList key={status} status={status} tasks={statusTasks}/>
+    return (
+      <TaskList
+        key={status}
+        status={status}
+        tasks={statusTasks}
+        onTaskStatusChange={onTaskStatusChange}
+      />
+    );
   })
 
   return (
