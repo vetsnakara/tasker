@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
 import TasksPage from "./components/TasksPage";
-import {createTask, editTask} from "./actions";
+import { createTask, editTask, fetchTasks } from "./actions";
 
-const App = ({tasks, dispatch}) => {
-  const handleTaskCreate = (task) => {
-    dispatch(createTask(task))
-  }
+const App = ({ tasks, dispatch }) => {
+  useEffect(() => {
+    dispatch(fetchTasks());
+  }, []);
+
+  const handleTaskCreate = task => {
+    dispatch(createTask(task));
+  };
 
   const handleStatusChange = (taskId, params) => {
     dispatch(editTask(taskId, params));
-  }
+  };
 
   return (
     <div className="main-content">
@@ -22,7 +26,7 @@ const App = ({tasks, dispatch}) => {
         onTaskStatusChange={handleStatusChange}
       />
     </div>
-  )
+  );
 };
 
 const mapState = state => ({

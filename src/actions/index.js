@@ -1,19 +1,17 @@
-let _id = 1;
+import axios from "axios";
 
 export const CREATE_TASK = "CREATE_TASK";
 export const EDIT_TASK = "EDIT_TASK";
+export const FETCH_TASKS_SUCCEEDED = "FETCH_TASKS_SUCCEEDED";
 
-export const uniqueId = () => _id++;
-
-export const createTask = ({title, description}) => ({
+export const createTask = ({ title, description }) => ({
   type: CREATE_TASK,
   payload: {
-    id: uniqueId(),
     title,
     description,
     status: "Unstarted"
   }
-})
+});
 
 export const editTask = (taskId, params = {}) => ({
   type: EDIT_TASK,
@@ -22,3 +20,16 @@ export const editTask = (taskId, params = {}) => ({
     params
   }
 });
+
+export const fetchTasksSucceeded = tasks => ({
+  type: FETCH_TASKS_SUCCEEDED,
+  payload: {
+    tasks
+  }
+});
+
+export const fetchTasks = () => dispatch => {
+  axios
+    .get("http://localhost:3333/tasks")
+    .then(({ data: tasks }) => dispatch(fetchTasksSucceeded(tasks)));
+};
