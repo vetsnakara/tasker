@@ -15,6 +15,7 @@ const App = ({tasks, dispatch}) => {
 
   return (
     <div className="main-content">
+      <h2>Tasker</h2>
       <TasksPage
         tasks={tasks}
         onTaskCreate={handleTaskCreate}
