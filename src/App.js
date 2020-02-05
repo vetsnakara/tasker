@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import TasksPage from "./components/TasksPage";
 import { createTask, editTask, fetchTasks } from "./actions";
 
-const App = ({ tasks, dispatch }) => {
+const App = ({ tasks, isLoading, dispatch }) => {
   useEffect(() => {
     dispatch(fetchTasks());
   }, []);
@@ -24,13 +24,15 @@ const App = ({ tasks, dispatch }) => {
         tasks={tasks}
         onTaskCreate={handleTaskCreate}
         onTaskStatusChange={handleStatusChange}
+        isLoading={isLoading}
       />
     </div>
   );
 };
 
-const mapState = state => ({
-  tasks: state.tasks
+const mapState = ({ tasks: { tasks, isLoading } }) => ({
+  tasks,
+  isLoading
 });
 
 export default connect(mapState)(App);

@@ -9,8 +9,12 @@ import tasksReducer from "./reducers";
 
 import App from "./App";
 
+const rootReducer = (state = {}, action) => ({
+  tasks: tasksReducer(state.tasks, action)
+});
+
 const store = createStore(
-  tasksReducer,
+  rootReducer,
   composeWithDevTools(applyMiddleware(thunk))
 );
 

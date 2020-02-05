@@ -1,24 +1,39 @@
-import { FETCH_TASKS_SUCCEEDED, CREATE_TASK, EDIT_TASK } from "../actions";
+import {
+  FETCH_TASKS_STARTED,
+  FETCH_TASKS_SUCCEEDED,
+  CREATE_TASKS_SUCCEEDED,
+  EDIT_TASK_SUCCEEDED
+} from "../actions";
 
 const initState = {
-  tasks: []
+  tasks: [],
+  isLoading: false
 };
 
 const tasksReducer = (state = initState, action) => {
   switch (action.type) {
+    case FETCH_TASKS_STARTED:
+      return {
+        ...state,
+        isLoading: true
+      };
     case FETCH_TASKS_SUCCEEDED:
       return {
-        tasks: action.payload.tasks
+        tasks: action.payload.tasks,
+        isLoading: false
       };
-    case CREATE_TASK:
+    case CREATE_TASKS_SUCCEEDED:
+      const { task } = action.payload;
       return {
-        tasks: [...state.tasks, action.payload]
+        ...state,
+        tasks: [...state.tasks, task]
       };
-    case EDIT_TASK:
-      const { taskId, params } = action.payload;
+    case EDIT_TASK_SUCCEEDED:
+      const { editedTask } = action.payload;
       return {
+        ...state,
         tasks: state.tasks.map(task =>
-          task.id === taskId ? { ...task, ...params } : task
+          task.id === editedTask.id ? editedTask : task
         )
       };
     default:
