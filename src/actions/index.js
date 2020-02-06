@@ -9,6 +9,10 @@ export const FETCH_TASKS_STARTED = "FETCH_TASKS_STARTED";
 export const CREATE_TASK_STARTED = "CREATE_TASK_STARTED";
 export const EDIT_TASK_STARTED = "EDIT_TASK_STARTED";
 
+export const FETCH_TASKS_FAILED = "FETCH_TASKS_FAILED";
+export const CREATE_TASK_FAILED = "CREATE_TASK_FAILED";
+export const EDIT_TASK_FAILED = "EDIT_TASK_FAILED";
+
 // UI ACTIONS
 export const fetchTasksStarted = () => ({
   type: FETCH_TASKS_STARTED
@@ -42,14 +46,31 @@ export const editTaskSucceeded = editedTask => ({
   }
 });
 
+export const fetchTasksFailed = error => ({
+  type: FETCH_TASKS_FAILED,
+  payload: { error }
+});
+
+export const createTaskFailed = error => ({
+  type: CREATE_TASK_FAILED,
+  payload: { error }
+});
+
+export const editTaskFailed = error => ({
+  type: EDIT_TASK_FAILED,
+  payload: { error }
+});
+
 // ASYNC ACTIONS
 export const fetchTasks = () => dispatch => {
   dispatch(fetchTasksStarted());
-  api.fetchTasks().then(({ data: tasks }) =>
-    setTimeout(() => {
+  api
+    .fetchTasks()
+    .then(({ data: tasks }) => {
       dispatch(fetchTasksSucceeded(tasks));
-    }, 2000)
-  );
+      // throw new Error("Fetch tasks error");
+    })
+    .catch(error => dispatch(fetchTasksFailed(error.message)));
 };
 
 export const createTask = ({
@@ -58,18 +79,22 @@ export const createTask = ({
   status = "Unstarted"
 }) => dispatch => {
   dispatch(createTaskStarted());
-  api.createTask({ title, description, status }).then(({ data: task }) =>
-    setTimeout(() => {
+  api
+    .createTask({ title, description, status })
+    .then(({ data: task }) => {
       dispatch(createTaskSucceeded(task));
-    }, 1000)
-  );
+      // throw new Error("Create task error");
+    })
+    .catch(error => dispatch(createTaskFailed(error.message)));
 };
 
 export const editTask = (taskId, params = {}) => dispatch => {
   dispatch(editTaskStarted());
-  api.editTask(taskId, params).then(({ data: editedTask }) =>
-    setTimeout(() => {
+  api
+    .editTask(taskId, params)
+    .then(({ data: editedTask }) => {
       dispatch(editTaskSucceeded(editedTask));
-    }, 1000)
-  );
+      // throw new Error("Edit task error");
+    })
+    .catch(error => dispatch(editTaskFailed(error.message)));
 };

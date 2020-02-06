@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
-import TasksPage from "./components/TasksPage";
 import { createTask, editTask, fetchTasks } from "./actions";
 
-const App = ({ tasks, isLoading, dispatch }) => {
+import TasksPage from "./components/TasksPage";
+import FlashMessage from "./components/FlashMessage";
+
+const App = ({ tasks, isLoading, error, dispatch }) => {
   useEffect(() => {
     dispatch(fetchTasks());
   }, []);
@@ -16,10 +18,9 @@ const App = ({ tasks, isLoading, dispatch }) => {
   const handleStatusChange = (taskId, params) => {
     dispatch(editTask(taskId, params));
   };
-
   return (
     <div className="main-content">
-      <h2>Tasker</h2>
+      {error && <FlashMessage message={error} />}
       <TasksPage
         tasks={tasks}
         onTaskCreate={handleTaskCreate}
@@ -30,9 +31,10 @@ const App = ({ tasks, isLoading, dispatch }) => {
   );
 };
 
-const mapState = ({ tasks: { tasks, isLoading } }) => ({
+const mapState = ({ tasks: { tasks, isLoading, error } }) => ({
   tasks,
-  isLoading
+  isLoading,
+  error
 });
 
 export default connect(mapState)(App);
