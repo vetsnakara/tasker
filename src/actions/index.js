@@ -36,7 +36,15 @@ export const fetchTasksSucceeded = tasks => ({
 
 export const createTaskSucceeded = task => ({
   type: CREATE_TASKS_SUCCEEDED,
-  payload: { task }
+  payload: { task },
+  meta: {
+    analytics: {
+      event: "create_task",
+      data: {
+        id: task.id
+      }
+    }
+  }
 });
 
 export const editTaskSucceeded = editedTask => ({
