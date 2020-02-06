@@ -3,11 +3,23 @@ import * as api from "../api";
 // ACTION TYPES
 export const EDIT_TASK_SUCCEEDED = "EDIT_TASK_SUCCEEDED";
 export const CREATE_TASKS_SUCCEEDED = "CREATE_TASKS_SUCCEEDED";
-export const FETCH_TASKS_STARTED = "FETCH_TASKS_STARTED";
 export const FETCH_TASKS_SUCCEEDED = "FETCH_TASKS_SUCCEEDED";
 
+export const FETCH_TASKS_STARTED = "FETCH_TASKS_STARTED";
+export const CREATE_TASK_STARTED = "CREATE_TASK_STARTED";
+export const EDIT_TASK_STARTED = "EDIT_TASK_STARTED";
+
+// UI ACTIONS
 export const fetchTasksStarted = () => ({
   type: FETCH_TASKS_STARTED
+});
+
+export const createTaskStarted = () => ({
+  type: CREATE_TASK_STARTED
+});
+
+export const editTaskStarted = () => ({
+  type: EDIT_TASK_STARTED
 });
 
 // SERVER ACTIONS
@@ -45,13 +57,19 @@ export const createTask = ({
   description,
   status = "Unstarted"
 }) => dispatch => {
-  api
-    .createTask({ title, description, status })
-    .then(({ data: task }) => dispatch(createTaskSucceeded(task)));
+  dispatch(createTaskStarted());
+  api.createTask({ title, description, status }).then(({ data: task }) =>
+    setTimeout(() => {
+      dispatch(createTaskSucceeded(task));
+    }, 1000)
+  );
 };
 
 export const editTask = (taskId, params = {}) => dispatch => {
-  api
-    .editTask(taskId, params)
-    .then(({ data: editedTask }) => dispatch(editTaskSucceeded(editedTask)));
+  dispatch(editTaskStarted());
+  api.editTask(taskId, params).then(({ data: editedTask }) =>
+    setTimeout(() => {
+      dispatch(editTaskSucceeded(editedTask));
+    }, 1000)
+  );
 };

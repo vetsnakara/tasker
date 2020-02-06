@@ -1,5 +1,7 @@
 import {
   FETCH_TASKS_STARTED,
+  CREATE_TASK_STARTED,
+  EDIT_TASK_STARTED,
   FETCH_TASKS_SUCCEEDED,
   CREATE_TASKS_SUCCEEDED,
   EDIT_TASK_SUCCEEDED
@@ -13,6 +15,8 @@ const initState = {
 const tasksReducer = (state = initState, action) => {
   switch (action.type) {
     case FETCH_TASKS_STARTED:
+    case CREATE_TASK_STARTED:
+    case EDIT_TASK_STARTED:
       return {
         ...state,
         isLoading: true
@@ -26,7 +30,8 @@ const tasksReducer = (state = initState, action) => {
       const { task } = action.payload;
       return {
         ...state,
-        tasks: [...state.tasks, task]
+        tasks: [...state.tasks, task],
+        isLoading: false
       };
     case EDIT_TASK_SUCCEEDED:
       const { editedTask } = action.payload;
@@ -34,7 +39,8 @@ const tasksReducer = (state = initState, action) => {
         ...state,
         tasks: state.tasks.map(task =>
           task.id === editedTask.id ? editedTask : task
-        )
+        ),
+        isLoading: false
       };
     default:
       return state;
