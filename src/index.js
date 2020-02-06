@@ -6,6 +6,7 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension/logOnlyInProduction";
 
 import tasksReducer from "./reducers";
+import logger from "./middlewares/logger";
 
 import App from "./App";
 
@@ -15,7 +16,7 @@ const rootReducer = (state = {}, action) => ({
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk))
+  composeWithDevTools(applyMiddleware(thunk, logger))
 );
 
 const render = App => {
