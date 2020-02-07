@@ -6,7 +6,7 @@ import {
   CREATE_TASK_FAILED,
   EDIT_TASK_FAILED,
   FETCH_TASKS_SUCCEEDED,
-  CREATE_TASKS_SUCCEEDED,
+  CREATE_TASK_SUCCEEDED,
   EDIT_TASK_SUCCEEDED
 } from "../actions";
 
@@ -31,24 +31,23 @@ const tasksReducer = (state = initState, action) => {
       return {
         ...state,
         isLoading: false,
-        error: action.payload.error
+        error: action.error
       };
     case FETCH_TASKS_SUCCEEDED:
       return {
-        tasks: action.payload.tasks,
+        tasks: action.payload,
         isLoading: false,
         error: null
       };
-    case CREATE_TASKS_SUCCEEDED:
-      const { task } = action.payload;
+    case CREATE_TASK_SUCCEEDED:
       return {
         ...state,
-        tasks: [...state.tasks, task],
+        tasks: [...state.tasks, action.payload],
         isLoading: false,
         error: null
       };
     case EDIT_TASK_SUCCEEDED:
-      const { editedTask } = action.payload;
+      const editedTask = action.payload;
       return {
         ...state,
         tasks: state.tasks.map(task =>

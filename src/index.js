@@ -8,6 +8,7 @@ import { composeWithDevTools } from "redux-devtools-extension/logOnlyInProductio
 import tasksReducer from "./reducers";
 import logger from "./middlewares/logger";
 import analytics from "./middlewares/analytics";
+import apiMiddleware from "./middlewares/api";
 
 import App from "./App";
 
@@ -17,7 +18,7 @@ const rootReducer = (state = {}, action) => ({
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk, analytics, logger))
+  composeWithDevTools(applyMiddleware(thunk, apiMiddleware, analytics, logger))
 );
 
 const render = App => {
