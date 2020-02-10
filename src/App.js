@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
-import { createTask, editTask, fetchTasks } from "./actions";
+import { createTask, editTask, fetchTasksStarted } from "./actions";
 
 import TasksPage from "./components/TasksPage";
 import FlashMessage from "./components/FlashMessage";
 
 const App = ({ tasks, isLoading, error, dispatch }) => {
   useEffect(() => {
-    dispatch(fetchTasks());
+    dispatch(fetchTasksStarted());
   }, []);
 
   const handleTaskCreate = task => {
